@@ -15,10 +15,12 @@ app.use(cors());
 app.post("/register", (req, res) => {
     console.log("teste register");
     console.log(req.body);
+    console.log(modGame.validDate(req.body));
     if (modGame.validDate(req.body)){
-        res.send(modGame.includes(req.body,dbplayes,dbscores));
+        let resp = modGame.includes(req.body,dbplayes,dbscores)
         fs.writeFile(jsonplayes, JSON.stringify(dbplayes), 'utf8', err=>{if(err)console.log(err)});
         fs.writeFile(jsonscores, JSON.stringify(dbscores), 'utf8', err=>{if(err)console.log(err)});
+        res.send(resp);
         return true;
     }
     res.send("error");
@@ -41,7 +43,7 @@ app.get("/status", (req, res) => {
     res.send("error");
     return false;
 });
-
+//informa uma url para acessar o jogo
 require('dns').lookup(require('os').hostname(), function (err, add, fam) {
     app.listen(port, () =>{
         console.log(`listening: http://${add}:${port}/`);
